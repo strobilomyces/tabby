@@ -24,16 +24,16 @@ defmodule Tabby.Albums.Album do
     |> handle_year_input()
   end
 
-
   defp handle_year_input(changeset) do
     case Ecto.Changeset.get_change(changeset, :year_input) do
-      nil -> 
-        changeset # Do nothing if the year was not altered or provided
-      
+      nil ->
+        # Do nothing if the year was not altered or provided
+        changeset
+
       year ->
         # Construct an ISO 8601 compliant string for Jan 1st
-        {:ok, date_struct} = Date.new(year, 1, 1) 
-      
+        {:ok, date_struct} = Date.new(year, 1, 1)
+
         # Inject the fully constructed date string into your actual database column
         Ecto.Changeset.put_change(changeset, :release_year, date_struct)
     end

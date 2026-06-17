@@ -8,7 +8,9 @@
       field={f[:year_input]}
       type="select"
       options={Enum.reverse(1900..2026)}
-      label="Release year" />
+      value={if @changeset.data.release_year != nil, do: @changeset.data.release_year.year}
+      label="Release year"
+    />
   </div>
 
   <footer>
