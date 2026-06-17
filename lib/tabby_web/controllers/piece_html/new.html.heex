@@ -1,0 +1,8 @@
+<Layouts.app flash={@flash}>
+  <.header>
+    New Piece
+    <:subtitle>Use this form to manage piece records in your database.</:subtitle>
+  </.header>
+
+  <.piece_form changeset={@changeset} action={~p"/pieces"} return_to={~p"/pieces"} />
+</Layouts.app>

@@ -1,0 +1,8 @@
+<Layouts.app flash={@flash}>
+  <.header>
+    New Album
+    <:subtitle>Use this form to manage album records in your database.</:subtitle>
+  </.header>
+
+  <.album_form changeset={@changeset} action={~p"/albums"} return_to={~p"/albums"} />
+</Layouts.app>

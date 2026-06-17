@@ -1,0 +1,19 @@
+<Layouts.app flash={@flash}>
+  <.header>
+    Artist {@artist.id}
+    <:subtitle>This is a artist record from your database.</:subtitle>
+    <:actions>
+      <.button navigate={~p"/artists"}>
+        <.icon name="hero-arrow-left" />
+      </.button>
+      <.button variant="primary" navigate={~p"/artists/#{@artist}/edit?return_to=show"}>
+        <.icon name="hero-pencil-square" /> Edit artist
+      </.button>
+    </:actions>
+  </.header>
+
+  <.list>
+    <:item title="Name">{@artist.name}</:item>
+    <:item title="Slug">{@artist.slug}</:item>
+  </.list>
+</Layouts.app>

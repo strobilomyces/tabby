@@ -1,0 +1,8 @@
+<Layouts.app flash={@flash}>
+  <.header>
+    Edit Artist {@artist.id}
+    <:subtitle>Use this form to manage artist records in your database.</:subtitle>
+  </.header>
+
+  <.artist_form changeset={@changeset} action={~p"/artists/#{@artist}"} return_to={~p"/artists"} />
+</Layouts.app>

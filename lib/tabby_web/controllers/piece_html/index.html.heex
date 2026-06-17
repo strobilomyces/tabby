@@ -1,0 +1,30 @@
+<Layouts.app flash={@flash}>
+  <.header>
+    Listing Pieces
+    <:actions>
+      <.button href={~p"/pieces/new"}>
+        <.icon name="hero-plus" /> New Piece
+      </.button>
+    </:actions>
+  </.header>
+
+  <.table id="pieces" rows={@pieces} row_click={&JS.navigate(~p"/pieces/#{&1}")}>
+    <:col :let={piece} label="Name">{piece.name}</:col>
+    <:col :let={piece} label="Slug">{piece.slug}</:col>
+    <:col :let={piece} label="Type">{piece.type}</:col>
+    <:col :let={piece} label="Instrument">{piece.instrument}</:col>
+    <:col :let={piece} label="Tuning">{piece.tuning}</:col>
+    <:col :let={piece} label="Contents">{piece.contents}</:col>
+    <:action :let={piece}>
+      <div class="sr-only">
+        <.link navigate={~p"/pieces/#{piece}"}>Show</.link>
+      </div>
+      <.link navigate={~p"/pieces/#{piece}/edit"}>Edit</.link>
+    </:action>
+    <:action :let={piece}>
+      <.link href={~p"/pieces/#{piece}"} method="delete" data-confirm="Are you sure?">
+        Delete
+      </.link>
+    </:action>
+  </.table>
+</Layouts.app>

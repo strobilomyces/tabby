@@ -1,0 +1,23 @@
+<Layouts.app flash={@flash}>
+  <.header>
+    Piece {@piece.id}
+    <:subtitle>This is a piece record from your database.</:subtitle>
+    <:actions>
+      <.button navigate={~p"/pieces"}>
+        <.icon name="hero-arrow-left" />
+      </.button>
+      <.button variant="primary" navigate={~p"/pieces/#{@piece}/edit?return_to=show"}>
+        <.icon name="hero-pencil-square" /> Edit piece
+      </.button>
+    </:actions>
+  </.header>
+
+  <.list>
+    <:item title="Name">{@piece.name}</:item>
+    <:item title="Slug">{@piece.slug}</:item>
+    <:item title="Type">{@piece.type}</:item>
+    <:item title="Instrument">{@piece.instrument}</:item>
+    <:item title="Tuning">{@piece.tuning}</:item>
+    <:item title="Contents">{@piece.contents}</:item>
+  </.list>
+</Layouts.app>

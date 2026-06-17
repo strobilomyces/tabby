@@ -1,0 +1,12 @@
+<.form :let={f} for={@changeset} action={@action}>
+  <.input field={f[:name]} type="text" label="Name" />
+  <.input field={f[:slug]} type="text" label="Slug" />
+  <.input field={f[:type]} type="text" label="Type" />
+  <.input field={f[:instrument]} type="text" label="Instrument" />
+  <.input field={f[:tuning]} type="text" label="Tuning" />
+  <.input field={f[:contents]} type="textarea" label="Contents" />
+  <footer>
+    <.button variant="primary">Save Piece</.button>
+    <.button :if={@return_to} href={@return_to}>Cancel</.button>
+  </footer>
+</.form>

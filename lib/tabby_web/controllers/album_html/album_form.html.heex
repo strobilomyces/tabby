@@ -1,0 +1,18 @@
+<.form :let={f} for={@changeset} action={@action}>
+  <.input field={f[:name]} type="text" label="Name" />
+
+  <.input field={f[:slug]} type="text" label="Slug" />
+
+  <div class="max-w-28">
+    <.input
+      field={f[:year_input]}
+      type="select"
+      options={Enum.reverse(1900..2026)}
+      label="Release year" />
+  </div>
+
+  <footer>
+    <.button variant="primary">Save Album</.button>
+    <.button :if={@return_to} href={@return_to}>Cancel</.button>
+  </footer>
+</.form>

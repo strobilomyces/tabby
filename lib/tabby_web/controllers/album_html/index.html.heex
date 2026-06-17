@@ -1,0 +1,27 @@
+<Layouts.app flash={@flash}>
+  <.header>
+    Listing Albums
+    <:actions>
+      <.button href={~p"/albums/new"}>
+        <.icon name="hero-plus" /> New Album
+      </.button>
+    </:actions>
+  </.header>
+
+  <.table id="albums" rows={@albums} row_click={&JS.navigate(~p"/albums/#{&1}")}>
+    <:col :let={album} label="Name">{album.name}</:col>
+    <:col :let={album} label="Slug">{album.slug}</:col>
+    <:col :let={album} label="Release year">{album.release_year}</:col>
+    <:action :let={album}>
+      <div class="sr-only">
+        <.link navigate={~p"/albums/#{album}"}>Show</.link>
+      </div>
+      <.link navigate={~p"/albums/#{album}/edit"}>Edit</.link>
+    </:action>
+    <:action :let={album}>
+      <.link href={~p"/albums/#{album}"} method="delete" data-confirm="Are you sure?">
+        Delete
+      </.link>
+    </:action>
+  </.table>
+</Layouts.app>
