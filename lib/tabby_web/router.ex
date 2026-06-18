@@ -20,11 +20,11 @@ defmodule TabbyWeb.Router do
   scope "/", TabbyWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
-
     resources "/artists", ArtistController
     resources "/albums", AlbumController
     resources "/pieces", PieceController
+
+    get "/", PieceController, :index
   end
 
   # Other scopes may use custom stacks.

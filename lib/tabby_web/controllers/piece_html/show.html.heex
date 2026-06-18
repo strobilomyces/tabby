@@ -1,4 +1,4 @@
-<Layouts.app flash={@flash}>
+<Layouts.app flash={@flash} current_scope={@current_scope}>
   <.header>
     Piece {@piece.id}
     <:subtitle>This is a piece record from your database.</:subtitle>
@@ -18,6 +18,6 @@
     <:item title="Type">{@piece.type}</:item>
     <:item title="Instrument">{@piece.instrument}</:item>
     <:item title="Tuning">{@piece.tuning}</:item>
-    <:item title="Contents">{@piece.contents}</:item>
+    <:item title="Contents"><pre>{raw(@piece.contents)}</pre></:item>
   </.list>
 </Layouts.app>

@@ -6,12 +6,12 @@ defmodule TabbyWeb.AlbumController do
 
   def index(conn, _params) do
     albums = Albums.list_albums()
-    render(conn, :index, albums: albums)
+    render(conn, :index, albums: albums, page_title: "Albums")
   end
 
   def new(conn, _params) do
     changeset = Albums.change_album(%Album{})
-    render(conn, :new, changeset: changeset)
+    render(conn, :new, changeset: changeset, page_title: "New Album")
   end
 
   def create(conn, %{"album" => album_params}) do
@@ -28,13 +28,13 @@ defmodule TabbyWeb.AlbumController do
 
   def show(conn, %{"id" => id}) do
     album = Albums.get_album!(id)
-    render(conn, :show, album: album)
+    render(conn, :show, album: album, page_title: album.name)
   end
 
   def edit(conn, %{"id" => id}) do
     album = Albums.get_album!(id)
     changeset = Albums.change_album(album)
-    render(conn, :edit, album: album, changeset: changeset)
+    render(conn, :edit, album: album, changeset: changeset, page_title: "Edit Album")
   end
 
   def update(conn, %{"id" => id, "album" => album_params}) do

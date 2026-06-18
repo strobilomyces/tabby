@@ -2,6 +2,33 @@ defmodule Tabby.Pieces.Piece do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @submission_type_list %{
+    "Chords": "Chords",
+    "Guitar Tab": "Guitar Tab",
+    "Bass Tab": "Bass Tab"
+  }
+
+  def submission_types, do: Enum.to_list(@submission_type_list)
+
+  @instrument_list %{
+    "Guitar": "Guitar",
+    "12-String Guitar": "!2-String Guitar",
+    "Bass": "Bass"
+  }
+
+  def instruments, do: Enum.to_list(@instrument_list)
+
+  @tuning_list %{
+    "Standard": "EADGBE",
+    "Dropped D": "DADGBE",
+    "Open D": "DADF#AD",
+    "Open G": "DGDGBD",
+    "Celtic": "DADGAD"
+  }
+
+  def tunings, do: Enum.to_list(@tuning_list)
+
+
   schema "pieces" do
     field :name, :string
     field :slug, :string
