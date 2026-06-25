@@ -38,6 +38,24 @@ defmodule Tabby.Artists do
   def get_artist!(id), do: Repo.get!(Artist, id)
 
   @doc """
+  Gets a single artist by their slug.
+
+  Raises `Ecto.NoResultsError` if the Artist does not exist.
+
+  ## Examples
+
+      iex> get_artist_by_slug!(good-slug)
+      %Artist{}
+
+      iex> get_artist_by_slug!(bad-slug)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_artist_by_slug!(slug) when is_binary(slug) do
+    Repo.get_by!(Artist, slug: slug)
+  end
+
+  @doc """
   Creates a artist.
 
   ## Examples

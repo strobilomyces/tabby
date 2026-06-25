@@ -3,6 +3,14 @@
 
   <.input field={f[:slug]} type="text" label="Slug" />
 
+  <.input
+    field={f[:artist_ids]}
+    type="select"
+    multiple
+    options={Tabby.Artists.Artist.artist_list()}
+    label="Artists"
+  />
+
   <div class="max-w-28">
     <.input
       field={f[:year_input]}

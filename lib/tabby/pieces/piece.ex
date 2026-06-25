@@ -2,31 +2,34 @@ defmodule Tabby.Pieces.Piece do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @submission_type_list %{
+  @submission_type_list [
+    "": "",
     Chords: "Chords",
     "Guitar Tab": "Guitar Tab",
     "Bass Tab": "Bass Tab"
-  }
+  ]
 
-  def submission_types, do: Enum.to_list(@submission_type_list)
+  def submission_types, do: @submission_type_list
 
-  @instrument_list %{
+  @instrument_list [
+    "": "",
     Guitar: "Guitar",
     "12-String Guitar": "12-String Guitar",
     Bass: "Bass"
-  }
+  ]
 
-  def instruments, do: Enum.to_list(@instrument_list)
+  def instruments, do: @instrument_list
 
-  @tuning_list %{
+  @tuning_list [
+    "": "",
     Standard: "EADGBE",
     "Dropped D": "DADGBE",
     "Open D": "DADF#AD",
     "Open G": "DGDGBD",
     Celtic: "DADGAD"
-  }
+  ]
 
-  def tunings, do: Enum.to_list(@tuning_list)
+  def tunings, do: @tuning_list
 
   schema "pieces" do
     field :name, :string
@@ -38,8 +41,13 @@ defmodule Tabby.Pieces.Piece do
 
     belongs_to :user, Tabby.Accounts.User
 
-    many_to_many :artists, Tabby.Artists.Artist, join_through: "artists_pieces"
-    many_to_many :albums, Tabby.Albums.Album, join_through: "albums_pieces"
+    many_to_many :artists, Tabby.Artists.Artist,
+      join_through: Tabby.ArtistsPieces.ArtistPiece,
+      on_replace: :delete
+
+    many_to_many :albums, Tabby.Albums.Album,
+      join_through: Tabby.AlbumsPieces.AlbumPiece,
+      on_replace: :delete
 
     timestamps(type: :utc_datetime)
   end

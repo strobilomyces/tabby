@@ -15,6 +15,11 @@
   <.list>
     <:item title="Name">{@album.name}</:item>
     <:item title="Slug">{@album.slug}</:item>
+    <:item title="Artist">
+      <span :for={artist <- @album.artists} class="not-last:after:content-['+']">
+        <.link href={~p"/artists/#{artist.slug}"}>{artist.name}</.link>
+      </span>
+    </:item>
     <:item title="Release year">{@album.release_year.year}</:item>
   </.list>
 </Layouts.app>

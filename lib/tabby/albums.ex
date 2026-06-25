@@ -18,7 +18,9 @@ defmodule Tabby.Albums do
 
   """
   def list_albums do
-    Repo.all(Album)
+    Album
+    |> preload(:artists)
+    |> Repo.all()
   end
 
   @doc """
@@ -35,7 +37,27 @@ defmodule Tabby.Albums do
       ** (Ecto.NoResultsError)
 
   """
-  def get_album!(id), do: Repo.get!(Album, id)
+  def get_album!(id) do
+    Repo.get!(Album, id) |> Repo.preload(:artists)
+  end
+
+  @doc """
+  Gets a single album from its slug.
+
+  Raises `Ecto.NoResultsError` if the Album does not exist.
+
+  ## Examples
+
+      iex> get_album_by_slug!(123)
+      %Album{}
+
+      iex> get_album_by_slug!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_album_by_slug!(slug) do
+    Repo.get_by!(Album, :slug, slug) |> Repo.preload(:artists)
+  end
 
   @doc """
   Creates a album.

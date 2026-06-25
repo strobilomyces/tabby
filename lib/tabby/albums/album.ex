@@ -1,6 +1,7 @@
 defmodule Tabby.Albums.Album do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
   schema "albums" do
     field :name, :string
@@ -9,8 +10,17 @@ defmodule Tabby.Albums.Album do
 
     field :year_input, :integer, virtual: true
 
-    many_to_many :artists, Tabby.Artists.Artist, join_through: "artists_albums"
-    many_to_many :pieces, Tabby.Pieces.Piece, join_through: "albums_pieces"
+    many_to_many :artists,
+                 Tabby.Artists.Artist,
+                 join_through: Tabby.ArtistsAlbums.ArtistAlbum,
+                 on_replace: :delete
+
+    many_to_many :pieces,
+                 Tabby.Pieces.Piece,
+                 join_through: Tabby.AlbumsPieces.AlbumPiece,
+                 on_replace: :delete
+
+    field :artist_ids, {:array, :id}, virtual: true
 
     timestamps(type: :utc_datetime)
   end
@@ -18,10 +28,11 @@ defmodule Tabby.Albums.Album do
   @doc false
   def changeset(album, attrs) do
     album
-    |> cast(attrs, [:name, :slug, :year_input])
-    |> validate_required([:name, :slug, :year_input])
+    |> cast(attrs, [:name, :slug, :year_input, :artist_ids])
+    |> validate_required([:name, :slug, :year_input, :artist_ids])
     |> unique_constraint(:slug)
     |> handle_year_input()
+    |> update_artists()
   end
 
   defp handle_year_input(changeset) do
@@ -36,6 +47,19 @@ defmodule Tabby.Albums.Album do
 
         # Inject the fully constructed date string into your actual database column
         Ecto.Changeset.put_change(changeset, :release_year, date_struct)
+    end
+  end
+
+  def update_artists(changeset) do
+    case get_change(changeset, :artist_ids) do
+      nil ->
+        changeset
+
+      artist_ids ->
+        query = from a in Tabby.Artists.Artist, where: a.id in ^artist_ids
+        artists = Tabby.Repo.all(query)
+
+        put_assoc(changeset, :artists, artists)
     end
   end
 end
