@@ -12,7 +12,7 @@ defmodule Tabby.Pieces.Piece do
 
   @instrument_list %{
     Guitar: "Guitar",
-    "12-String Guitar": "!2-String Guitar",
+    "12-String Guitar": "12-String Guitar",
     Bass: "Bass"
   }
 

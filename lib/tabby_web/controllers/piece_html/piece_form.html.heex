@@ -19,7 +19,12 @@
 
   <.input field={f[:tuning]} type="select" options={Tabby.Pieces.Piece.tunings()} label="Tuning" />
 
-  <.input field={f[:contents]} type="textarea" label="Contents" />
+  <.input
+    field={f[:contents]}
+    type="textarea"
+    label="Contents"
+    class="w-full min-h-128 textarea font-[monospace]"
+  />
 
   <footer>
     <.button variant="primary">Save Piece</.button>

@@ -14,7 +14,6 @@
     <:col :let={piece} label="Type">{piece.type}</:col>
     <:col :let={piece} label="Instrument">{piece.instrument}</:col>
     <:col :let={piece} label="Tuning">{piece.tuning}</:col>
-    <:col :let={piece} label="Contents">{piece.contents}</:col>
     <:action :let={piece}>
       <div class="sr-only">
         <.link navigate={~p"/pieces/#{piece}"}>Show</.link>
