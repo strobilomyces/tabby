@@ -55,8 +55,8 @@ defmodule Tabby.Albums do
       ** (Ecto.NoResultsError)
 
   """
-  def get_album_by_slug!(slug) do
-    Repo.get_by!(Album, :slug, slug) |> Repo.preload(:artists)
+  def get_album_by_slug!(slug) when is_binary(slug) do
+    Repo.get_by!(Album, slug: slug) |> Repo.preload(:artists)
   end
 
   @doc """

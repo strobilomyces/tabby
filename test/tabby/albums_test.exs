@@ -12,23 +12,26 @@ defmodule Tabby.AlbumsTest do
 
     test "list_albums/0 returns all albums" do
       album = album_fixture()
-      expected_album = %{album | year_input: nil}
+      expected_album = %{album | year_input: nil, artist_ids: nil}
 
       assert Albums.list_albums() == [expected_album]
     end
 
     test "get_album!/1 returns the album with given id" do
       album = album_fixture()
-      expected_album = %{album | year_input: nil}
+      expected_album = %{album | year_input: nil, artist_ids: nil}
 
       assert Albums.get_album!(album.id) == expected_album
     end
 
     test "create_album/1 with valid data creates a album" do
+      artist = Tabby.ArtistsFixtures.artist_fixture()
+
       valid_attrs = %{
         name: "some name",
         slug: "some slug",
-        year_input: 2026
+        year_input: 2026,
+        artist_ids: [artist.id]
       }
 
       assert {:ok, %Album{} = album} = Albums.create_album(valid_attrs)
@@ -58,7 +61,7 @@ defmodule Tabby.AlbumsTest do
 
     test "update_album/2 with invalid data returns error changeset" do
       album = album_fixture()
-      expected_album = %{album | year_input: nil}
+      expected_album = %{album | year_input: nil, artist_ids: nil}
 
       assert {:error, %Ecto.Changeset{}} = Albums.update_album(expected_album, @invalid_attrs)
       assert expected_album == Albums.get_album!(expected_album.id)

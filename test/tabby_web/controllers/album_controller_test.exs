@@ -3,12 +3,20 @@ defmodule TabbyWeb.AlbumControllerTest do
 
   import Tabby.AlbumsFixtures
 
-  @create_attrs %{name: "some name", slug: "some slug", year_input: 2026}
+  @create_attrs %{
+    name: "some name",
+    slug: "some slug",
+    year_input: 2026,
+    artist_ids: [1]
+  }
+
   @update_attrs %{
     name: "some updated name",
     slug: "some updated slug",
-    year_input: 2024
+    year_input: 2024,
+    artist_ids: [1]
   }
+
   @invalid_attrs %{name: nil, slug: nil, year_input: nil}
 
   describe "index" do
