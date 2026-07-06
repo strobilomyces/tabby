@@ -18,7 +18,9 @@ defmodule Tabby.Pieces do
 
   """
   def list_pieces do
-    Repo.all(Piece)
+    Piece
+    |> preload(:artists)
+    |> Repo.all()
   end
 
   @doc """

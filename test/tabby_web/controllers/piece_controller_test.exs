@@ -9,7 +9,8 @@ defmodule TabbyWeb.PieceControllerTest do
     slug: "some slug",
     instrument: "some instrument",
     tuning: "some tuning",
-    contents: "some contents"
+    contents: "some contents",
+    artist_ids: [1]
   }
   @update_attrs %{
     name: "some updated name",
@@ -17,7 +18,8 @@ defmodule TabbyWeb.PieceControllerTest do
     slug: "some updated slug",
     instrument: "some updated instrument",
     tuning: "some updated tuning",
-    contents: "some updated contents"
+    contents: "some updated contents",
+    artist_ids: [1]
   }
   @invalid_attrs %{name: nil, type: nil, slug: nil, instrument: nil, tuning: nil, contents: nil}
 

@@ -8,6 +8,7 @@ defmodule Tabby.PiecesFixtures do
   Generate a unique piece slug.
   """
   def unique_piece_slug, do: "some slug#{System.unique_integer([:positive])}"
+  def artist_id, do: Tabby.ArtistsFixtures.artist_fixture().id
 
   @doc """
   Generate a piece.
@@ -21,7 +22,8 @@ defmodule Tabby.PiecesFixtures do
         name: "some name",
         slug: unique_piece_slug(),
         tuning: "some tuning",
-        type: "some type"
+        type: "some type",
+        artist_ids: [artist_id()]
       })
       |> Tabby.Pieces.create_piece()
 
