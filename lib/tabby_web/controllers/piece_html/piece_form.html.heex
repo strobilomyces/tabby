@@ -1,4 +1,12 @@
 <.form :let={f} for={@changeset} action={@action}>
+  <.input
+    field={f[:artist_ids]}
+    type="select"
+    multiple
+    options={Tabby.Artists.Artist.artist_list()}
+    label="Artists"
+  />
+
   <.input field={f[:name]} type="text" label="Name" />
 
   <.input field={f[:slug]} type="text" label="Slug" />
@@ -17,7 +25,19 @@
     label="Instrument"
   />
 
-  <.input field={f[:tuning]} type="select" options={Tabby.Pieces.Piece.tunings()} label="Tuning" />
+  <.input
+    field={f[:tuning]}
+    type="select"
+    options={Tabby.Pieces.Piece.tunings()}
+    label="Tuning"
+  />
+
+  <.input
+    field={f[:capo]}
+    type="select"
+    options={Tabby.Pieces.Piece.capo_options()}
+    label="Capo"
+  />
 
   <.input
     field={f[:contents]}

@@ -13,6 +13,11 @@
   </.header>
 
   <.list>
+    <:item title="Artist">
+      <span :for={artist <- @piece.artists} class="not-last:after:content-['+']">
+        <.link href={~p"/artists/#{artist.slug}"}>{artist.name}</.link>
+      </span>
+    </:item>
     <:item title="Name">{@piece.name}</:item>
     <:item title="Slug">{@piece.slug}</:item>
     <:item title="Type">{@piece.type}</:item>

@@ -35,7 +35,10 @@ defmodule Tabby.Pieces do
       ** (Ecto.NoResultsError)
 
   """
-  def get_piece!(id), do: Repo.get!(Piece, id)
+  def get_piece!(id) do
+    Repo.get!(Piece, id)
+    |> Repo.preload(:artists)
+  end
 
   @doc """
   Creates a piece.

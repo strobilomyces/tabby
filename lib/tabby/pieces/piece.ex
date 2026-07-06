@@ -1,35 +1,50 @@
 defmodule Tabby.Pieces.Piece do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query
 
-  @submission_type_list [
-    "": "",
-    Chords: "Chords",
-    "Guitar Tab": "Guitar Tab",
-    "Bass Tab": "Bass Tab"
-  ]
+  def submission_types,
+    do: [
+      "": "",
+      Chords: "Chords",
+      "Guitar Tab": "Guitar Tab",
+      "Bass Tab": "Bass Tab"
+    ]
 
-  def submission_types, do: @submission_type_list
+  def instruments,
+    do: [
+      "": "",
+      Guitar: "Guitar",
+      "12-String Guitar": "12-String Guitar",
+      Bass: "Bass"
+    ]
 
-  @instrument_list [
-    "": "",
-    Guitar: "Guitar",
-    "12-String Guitar": "12-String Guitar",
-    Bass: "Bass"
-  ]
+  def tunings,
+    do: [
+      "": "",
+      Standard: "EADGBE",
+      "Dropped D": "DADGBE",
+      "Open D": "DADF#AD",
+      "Open G": "DGDGBD",
+      Celtic: "DADGAD"
+    ]
 
-  def instruments, do: @instrument_list
-
-  @tuning_list [
-    "": "",
-    Standard: "EADGBE",
-    "Dropped D": "DADGBE",
-    "Open D": "DADF#AD",
-    "Open G": "DGDGBD",
-    Celtic: "DADGAD"
-  ]
-
-  def tunings, do: @tuning_list
+  def capo_options,
+    do: [
+      "": "",
+      "1st": "1",
+      "2nd": "2",
+      "3rd": "3",
+      "4th": "4",
+      "5th": "5",
+      "6th": "6",
+      "7th": "7",
+      "8th": "8",
+      "9th": "9",
+      "10th": "10",
+      "11th": "11",
+      "12th": "12"
+    ]
 
   schema "pieces" do
     field :name, :string
@@ -37,6 +52,7 @@ defmodule Tabby.Pieces.Piece do
     field :type, :string
     field :instrument, :string
     field :tuning, :string
+    field :capo, :string
     field :contents, :string
 
     belongs_to :user, Tabby.Accounts.User
@@ -44,6 +60,8 @@ defmodule Tabby.Pieces.Piece do
     many_to_many :artists, Tabby.Artists.Artist,
       join_through: Tabby.ArtistsPieces.ArtistPiece,
       on_replace: :delete
+
+    field :artist_ids, {:array, :id}, virtual: true
 
     many_to_many :albums, Tabby.Albums.Album,
       join_through: Tabby.AlbumsPieces.AlbumPiece,
@@ -55,8 +73,22 @@ defmodule Tabby.Pieces.Piece do
   @doc false
   def changeset(piece, attrs) do
     piece
-    |> cast(attrs, [:name, :slug, :type, :instrument, :tuning, :contents])
-    |> validate_required([:name, :slug, :type, :instrument, :tuning, :contents])
+    |> cast(attrs, [:name, :slug, :type, :instrument, :tuning, :contents, :capo, :artist_ids])
+    |> validate_required([:name, :slug, :type, :instrument, :tuning, :contents, :artist_ids])
     |> unique_constraint(:slug)
+    |> update_artists()
+  end
+
+  def update_artists(changeset) do
+    case get_change(changeset, :artist_ids) do
+      nil ->
+        changeset
+
+      artist_ids ->
+        query = from a in Tabby.Artists.Artist, where: a.id in ^artist_ids
+        artists = Tabby.Repo.all(query)
+
+        put_assoc(changeset, :artists, artists)
+    end
   end
 end
