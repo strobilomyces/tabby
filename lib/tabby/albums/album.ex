@@ -3,6 +3,8 @@ defmodule Tabby.Albums.Album do
   import Ecto.Changeset
   import Ecto.Query
 
+  def album_list, do: Tabby.Albums.list_albums() |> Enum.map(&{&1.name, &1.id})
+
   schema "albums" do
     field :name, :string
     field :slug, :string
@@ -28,8 +30,9 @@ defmodule Tabby.Albums.Album do
   @doc false
   def changeset(album, attrs) do
     album
-    |> cast(attrs, [:name, :slug, :year_input, :artist_ids])
-    |> validate_required([:name, :slug, :year_input, :artist_ids])
+    |> cast(attrs, [:name, :year_input, :artist_ids])
+    |> validate_required([:name, :year_input, :artist_ids])
+    |> generate_slug()
     |> unique_constraint(:slug)
     |> handle_year_input()
     |> update_artists()
@@ -60,6 +63,17 @@ defmodule Tabby.Albums.Album do
         artists = Tabby.Repo.all(query)
 
         put_assoc(changeset, :artists, artists)
+    end
+  end
+
+  defp generate_slug(changeset) do
+    case fetch_change(changeset, :name) do
+      {:ok, name} ->
+        slug = Slugy.slugify(name)
+        put_change(changeset, :slug, slug)
+
+      :error ->
+        changeset
     end
   end
 end

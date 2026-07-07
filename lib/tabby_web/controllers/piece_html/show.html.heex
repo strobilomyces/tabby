@@ -1,7 +1,7 @@
 <Layouts.app flash={@flash} current_scope={@current_scope}>
   <.header>
-    Piece {@piece.id}
-    <:subtitle>This is a piece record from your database.</:subtitle>
+    {@piece.name}
+    <:subtitle>{@piece.slug}</:subtitle>
     <:actions>
       <.button navigate={~p"/pieces"}>
         <.icon name="hero-arrow-left" />
@@ -13,13 +13,16 @@
   </.header>
 
   <.list>
-    <:item title="Artist">
+    <:item title="Artist(s)">
       <span :for={artist <- @piece.artists} class="not-last:after:content-['+']">
-        <.link href={~p"/artists/#{artist.slug}"}>{artist.name}</.link>
+        <.link href={~p"/artist/#{artist.slug}"}>{artist.name}</.link>
       </span>
     </:item>
-    <:item title="Name">{@piece.name}</:item>
-    <:item title="Slug">{@piece.slug}</:item>
+    <:item title="Album">
+      <span :for={album <- @piece.albums} class="not-last:after:content-['+']">
+        <.link href={~p"/album/#{album.slug}"}>{album.name}</.link>
+      </span>
+    </:item>
     <:item title="Type">{@piece.type}</:item>
     <:item title="Instrument">{@piece.instrument}</:item>
     <:item title="Tuning">{@piece.tuning}</:item>

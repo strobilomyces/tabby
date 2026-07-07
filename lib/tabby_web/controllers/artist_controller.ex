@@ -31,6 +31,11 @@ defmodule TabbyWeb.ArtistController do
     render(conn, :show, artist: artist)
   end
 
+  def show_slug(conn, %{"slug" => slug}) do
+    artist = Artists.get_artist_by_slug!(slug)
+    render(conn, :show, artist: artist)
+  end
+
   def edit(conn, %{"id" => id}) do
     artist = Artists.get_artist!(id)
     changeset = Artists.change_artist(artist)

@@ -21,11 +21,11 @@ defmodule Tabby.ArtistsTest do
     end
 
     test "create_artist/1 with valid data creates a artist" do
-      valid_attrs = %{name: "some name", slug: "some slug"}
+      valid_attrs = %{name: "some new name"}
 
       assert {:ok, %Artist{} = artist} = Artists.create_artist(valid_attrs)
-      assert artist.name == "some name"
-      assert artist.slug == "some slug"
+      assert artist.name == "some new name"
+      assert artist.slug == "some-new-name"
     end
 
     test "create_artist/1 with invalid data returns error changeset" do
@@ -34,11 +34,11 @@ defmodule Tabby.ArtistsTest do
 
     test "update_artist/2 with valid data updates the artist" do
       artist = artist_fixture()
-      update_attrs = %{name: "some updated name", slug: "some updated slug"}
+      update_attrs = %{name: "some updated name"}
 
       assert {:ok, %Artist{} = artist} = Artists.update_artist(artist, update_attrs)
       assert artist.name == "some updated name"
-      assert artist.slug == "some updated slug"
+      assert artist.slug == "some-updated-name"
     end
 
     test "update_artist/2 with invalid data returns error changeset" do

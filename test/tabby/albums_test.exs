@@ -29,14 +29,13 @@ defmodule Tabby.AlbumsTest do
 
       valid_attrs = %{
         name: "some name",
-        slug: "some slug",
         year_input: 2026,
         artist_ids: [artist.id]
       }
 
       assert {:ok, %Album{} = album} = Albums.create_album(valid_attrs)
       assert album.name == "some name"
-      assert album.slug == "some slug"
+      assert album.slug == "some-name"
       assert album.release_year.year == 2026
     end
 
@@ -49,13 +48,12 @@ defmodule Tabby.AlbumsTest do
 
       update_attrs = %{
         name: "some updated name",
-        slug: "some updated slug",
         year_input: 2025
       }
 
       assert {:ok, %Album{} = album} = Albums.update_album(album, update_attrs)
       assert album.name == "some updated name"
-      assert album.slug == "some updated slug"
+      assert album.slug == "some-updated-name"
       assert album.release_year.year == 2025
     end
 

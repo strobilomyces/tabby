@@ -19,7 +19,7 @@ defmodule Tabby.Pieces do
   """
   def list_pieces do
     Piece
-    |> preload(:artists)
+    |> preload([:artists, :albums])
     |> Repo.all()
   end
 
@@ -39,7 +39,7 @@ defmodule Tabby.Pieces do
   """
   def get_piece!(id) do
     Repo.get!(Piece, id)
-    |> Repo.preload(:artists)
+    |> Repo.preload([:artists, :albums])
   end
 
   @doc """

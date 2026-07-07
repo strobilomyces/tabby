@@ -10,7 +10,6 @@
 
   <.table id="artists" rows={@artists} row_click={&JS.navigate(~p"/artists/#{&1}")}>
     <:col :let={artist} label="Name">{artist.name}</:col>
-    <:col :let={artist} label="Slug">{artist.slug}</:col>
     <:action :let={artist}>
       <div class="sr-only">
         <.link navigate={~p"/artists/#{artist}"}>Show</.link>

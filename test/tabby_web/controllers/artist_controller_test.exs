@@ -3,8 +3,8 @@ defmodule TabbyWeb.ArtistControllerTest do
 
   import Tabby.ArtistsFixtures
 
-  @create_attrs %{name: "some name", slug: "some slug"}
-  @update_attrs %{name: "some updated name", slug: "some updated slug"}
+  @create_attrs %{name: "some name", slug: "some-slug"}
+  @update_attrs %{name: "some updated name", slug: "some-updated-slug"}
   @invalid_attrs %{name: nil, slug: nil}
 
   describe "index" do
@@ -29,7 +29,7 @@ defmodule TabbyWeb.ArtistControllerTest do
       assert redirected_to(conn) == ~p"/artists/#{id}"
 
       conn = get(conn, ~p"/artists/#{id}")
-      assert html_response(conn, 200) =~ "Artist #{id}"
+      assert html_response(conn, 200) =~ @create_attrs.name
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

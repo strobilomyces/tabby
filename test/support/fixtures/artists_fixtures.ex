@@ -4,10 +4,7 @@ defmodule Tabby.ArtistsFixtures do
   entities via the `Tabby.Artists` context.
   """
 
-  @doc """
-  Generate a unique artist slug.
-  """
-  def unique_artist_slug, do: "some slug#{System.unique_integer([:positive])}"
+  def unique_name, do: "some name #{System.unique_integer([:positive])}"
 
   @doc """
   Generate a artist.
@@ -16,8 +13,7 @@ defmodule Tabby.ArtistsFixtures do
     {:ok, artist} =
       attrs
       |> Enum.into(%{
-        name: "some name",
-        slug: unique_artist_slug()
+        name: unique_name()
       })
       |> Tabby.Artists.create_artist()
 

@@ -22,8 +22,20 @@ defmodule Tabby.Artists.Artist do
   @doc false
   def changeset(artist, attrs) do
     artist
-    |> cast(attrs, [:name, :slug])
-    |> validate_required([:name, :slug])
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
+    |> generate_slug()
     |> unique_constraint(:slug)
+  end
+
+  defp generate_slug(changeset) do
+    case fetch_change(changeset, :name) do
+      {:ok, name} ->
+        slug = Slugy.slugify(name)
+        put_change(changeset, :slug, slug)
+
+      :error ->
+        changeset
+    end
   end
 end

@@ -4,11 +4,9 @@ defmodule Tabby.PiecesFixtures do
   entities via the `Tabby.Pieces` context.
   """
 
-  @doc """
-  Generate a unique piece slug.
-  """
-  def unique_piece_slug, do: "some slug#{System.unique_integer([:positive])}"
+  def unique_name, do: "some name #{System.unique_integer([:positive])}"
   def artist_id, do: Tabby.ArtistsFixtures.artist_fixture().id
+  def album_id, do: Tabby.AlbumsFixtures.album_fixture().id
 
   @doc """
   Generate a piece.
@@ -19,11 +17,11 @@ defmodule Tabby.PiecesFixtures do
       |> Enum.into(%{
         contents: "some contents",
         instrument: "some instrument",
-        name: "some name",
-        slug: unique_piece_slug(),
+        name: unique_name(),
         tuning: "some tuning",
         type: "some type",
-        artist_ids: [artist_id()]
+        artist_ids: [artist_id()],
+        album_ids: [album_id()]
       })
       |> Tabby.Pieces.create_piece()
 

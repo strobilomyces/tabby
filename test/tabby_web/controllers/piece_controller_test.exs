@@ -6,20 +6,20 @@ defmodule TabbyWeb.PieceControllerTest do
   @create_attrs %{
     name: "some name",
     type: "some type",
-    slug: "some slug",
     instrument: "some instrument",
     tuning: "some tuning",
     contents: "some contents",
-    artist_ids: [1]
+    artist_ids: [1],
+    album_ids: [1]
   }
   @update_attrs %{
     name: "some updated name",
     type: "some updated type",
-    slug: "some updated slug",
     instrument: "some updated instrument",
     tuning: "some updated tuning",
     contents: "some updated contents",
-    artist_ids: [1]
+    artist_ids: [1],
+    album_ids: [1]
   }
   @invalid_attrs %{name: nil, type: nil, slug: nil, instrument: nil, tuning: nil, contents: nil}
 
@@ -45,7 +45,7 @@ defmodule TabbyWeb.PieceControllerTest do
       assert redirected_to(conn) == ~p"/pieces/#{id}"
 
       conn = get(conn, ~p"/pieces/#{id}")
-      assert html_response(conn, 200) =~ "Piece #{id}"
+      assert html_response(conn, 200) =~ @create_attrs.name
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

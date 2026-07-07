@@ -31,6 +31,11 @@ defmodule TabbyWeb.AlbumController do
     render(conn, :show, album: album, page_title: album.name)
   end
 
+  def show_slug(conn, %{"slug" => slug}) do
+    album = Albums.get_album_by_slug!(slug)
+    render(conn, :show, album: album, page_title: album.name)
+  end
+
   def edit(conn, %{"id" => id}) do
     album = Albums.get_album!(id)
     changeset = Albums.change_album(album)

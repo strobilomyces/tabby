@@ -41,7 +41,7 @@ defmodule TabbyWeb.AlbumControllerTest do
       assert redirected_to(conn) == ~p"/albums/#{id}"
 
       conn = get(conn, ~p"/albums/#{id}")
-      assert html_response(conn, 200) =~ "Album #{id}"
+      assert html_response(conn, 200) =~ @create_attrs.name
     end
 
     test "renders errors when data is invalid", %{conn: conn} do

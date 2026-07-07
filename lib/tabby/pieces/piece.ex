@@ -67,16 +67,20 @@ defmodule Tabby.Pieces.Piece do
       join_through: Tabby.AlbumsPieces.AlbumPiece,
       on_replace: :delete
 
+    field :album_ids, {:array, :id}, virtual: true
+
     timestamps(type: :utc_datetime)
   end
 
   @doc false
   def changeset(piece, attrs) do
     piece
-    |> cast(attrs, [:name, :slug, :type, :instrument, :tuning, :contents, :capo, :artist_ids])
-    |> validate_required([:name, :slug, :type, :instrument, :tuning, :contents, :artist_ids])
+    |> cast(attrs, [:name, :type, :instrument, :tuning, :contents, :capo, :artist_ids, :album_ids])
+    |> validate_required([:name, :type, :instrument, :tuning, :contents, :artist_ids, :album_ids])
+    |> generate_slug()
     |> unique_constraint(:slug)
     |> update_artists()
+    |> update_albums()
   end
 
   def update_artists(changeset) do
@@ -89,6 +93,30 @@ defmodule Tabby.Pieces.Piece do
         artists = Tabby.Repo.all(query)
 
         put_assoc(changeset, :artists, artists)
+    end
+  end
+
+  def update_albums(changeset) do
+    case get_change(changeset, :album_ids) do
+      nil ->
+        changeset
+
+      album_ids ->
+        query = from a in Tabby.Albums.Album, where: a.id in ^album_ids
+        albums = Tabby.Repo.all(query)
+
+        put_assoc(changeset, :albums, albums)
+    end
+  end
+
+  defp generate_slug(changeset) do
+    case fetch_change(changeset, :name) do
+      {:ok, name} ->
+        slug = Slugy.slugify(name)
+        put_change(changeset, :slug, slug)
+
+      :error ->
+        changeset
     end
   end
 end

@@ -10,7 +10,6 @@
 
   <.table id="pieces" rows={@pieces} row_click={&JS.navigate(~p"/pieces/#{&1}")}>
     <:col :let={piece} label="Name">{piece.name}</:col>
-    <:col :let={piece} label="Slug">{piece.slug}</:col>
     <:col :let={piece} label="Type">{piece.type}</:col>
     <:col :let={piece} label="Instrument">{piece.instrument}</:col>
     <:col :let={piece} label="Tuning">{piece.tuning}</:col>

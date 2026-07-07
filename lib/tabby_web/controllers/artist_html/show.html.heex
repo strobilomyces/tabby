@@ -1,7 +1,7 @@
 <Layouts.app flash={@flash} current_scope={@current_scope}>
   <.header>
-    Artist {@artist.id}
-    <:subtitle>This is a artist record from your database.</:subtitle>
+    {@artist.name}
+    <:subtitle>{@artist.slug}</:subtitle>
     <:actions>
       <.button navigate={~p"/artists"}>
         <.icon name="hero-arrow-left" />
@@ -11,9 +11,4 @@
       </.button>
     </:actions>
   </.header>
-
-  <.list>
-    <:item title="Name">{@artist.name}</:item>
-    <:item title="Slug">{@artist.slug}</:item>
-  </.list>
 </Layouts.app>

@@ -4,12 +4,22 @@
     type="select"
     multiple
     options={Tabby.Artists.Artist.artist_list()}
+    value={
+      if Ecto.assoc_loaded?(@changeset.data.artists),
+        do: Enum.map(@changeset.data.artists, & &1.id)
+    }
     label="Artists"
   />
 
-  <.input field={f[:name]} type="text" label="Name" />
+  <.input
+    field={f[:album_ids]}
+    type="select"
+    multiple
+    options={Tabby.Albums.Album.album_list()}
+    label="Album"
+  />
 
-  <.input field={f[:slug]} type="text" label="Slug" />
+  <.input field={f[:name]} type="text" label="Name" />
 
   <.input
     field={f[:type]}
