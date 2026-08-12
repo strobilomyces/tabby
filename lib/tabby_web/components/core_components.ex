@@ -502,4 +502,83 @@ defmodule TabbyWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  @doc """
+  Creates a multiselect dropdown
+  """
+  attr :name, :string, required: true
+  attr :label, :string, default: nil
+  attr :options, :list, required: true
+  attr :value, :list, default: []
+
+  def dropdown_multiselect(assigns) do
+    str_values = Enum.map(assigns.value, &to_string/1)
+
+    # Initial load from database/changeset (for page loads or form validation errors)
+    selected_labels = for {label, val} <- assigns.options, to_string(val) in str_values, do: label
+
+    assigns =
+      assigns
+      |> assign(:str_values, str_values)
+      |> assign(:selected_labels, selected_labels)
+      |> assign(
+        :clean_id,
+        String.replace(assigns.name, ~r/[\[\]]/, "-") |> String.replace("--", "-")
+      )
+
+    ~H"""
+    <div class="space-y-1" id={"dropdown-wrapper-#{@clean_id}"} phx-hook="DropdownDisplay">
+      <label class="block text-sm font-semibold text-zinc-800">{@label}</label>
+      <input type="hidden" name={@name} value="" />
+
+      <div class="relative" id={"dropdown-container-#{@clean_id}"}>
+        <%!-- Trigger Button --%>
+        <button
+          type="button"
+          phx-click={JS.toggle(to: "#menu-#{@clean_id}")}
+          phx-click-away={JS.hide(to: "#menu-#{@clean_id}")}
+          class="mb-4 w-full flex items-center justify-between rounded-lg border border-zinc-300 bg-white px-3 py-2 text-left text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 min-h-[42px]"
+        >
+          <%!-- Class 'selected-display-text' added for JavaScript to target --%>
+          <span class="selected-display-text truncate text-zinc-600">
+            <%= if Enum.empty?(@selected_labels) do %>
+              Select options...
+            <% else %>
+              {Enum.join(@selected_labels, ", ")}
+            <% end %>
+          </span>
+
+          <svg class="h-5 w-5 text-zinc-400 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+            <path
+              fill-rule="evenodd"
+              d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+
+        <%!-- Dropdown Menu List (Order remains locked) --%>
+        <div
+          id={"menu-#{@clean_id}"}
+          class="hidden absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+        >
+          <%= for {label, val} <- @options do %>
+            <% str_val = to_string(val) %>
+            <label class="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                name={@name <> "[]"}
+                value={str_val}
+                checked={str_val in @str_values}
+                class="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
+              />
+              <%!-- Class 'item-label-text' added for JavaScript to target --%>
+              <span class="item-label-text truncate">{label}</span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    """
+  end
 end

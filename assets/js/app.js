@@ -25,11 +25,38 @@ import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/tabby"
 import topbar from "../vendor/topbar"
 
+const DropdownDisplay = {
+  mounted() {
+    this.buttonText = this.el.querySelector('.selected-display-text')
+    
+    this.el.addEventListener('change', (e) => {
+      if (e.target.type === 'checkbox') {
+        this.updateButtonText()
+      }
+    })
+  },
+
+  updateButtonText() {
+    let checkedBoxes = Array.from(this.el.querySelectorAll('input[type="checkbox"]:checked'))
+    
+    if (checkedBoxes.length === 0) {
+      this.buttonText.textContent = "Select options..."
+      return
+    }
+
+    let selectedNames = checkedBoxes.map(checkbox => {
+      return checkbox.closest('label').querySelector('.item-label-text').textContent.trim()
+    })
+
+    this.buttonText.textContent = selectedNames.join(", ")
+  }
+}
+
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks},
+  hooks: {...colocatedHooks, DropdownDisplay},
 })
 
 // Show progress bar on live navigation and form submits

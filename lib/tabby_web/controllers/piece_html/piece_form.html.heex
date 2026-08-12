@@ -1,22 +1,28 @@
 <.form :let={f} for={@changeset} action={@action}>
-  <.input
-    field={f[:artist_ids]}
-    type="select"
-    multiple
+  <.dropdown_multiselect
+    name="piece[artist_ids]"
+    label="Artists"
     options={Tabby.Artists.Artist.artist_list()}
     value={
-      if Ecto.assoc_loaded?(@changeset.data.artists),
-        do: Enum.map(@changeset.data.artists, & &1.id)
+      cond do
+        val = Phoenix.HTML.Form.input_value(f, :artist_ids) -> val
+        Ecto.assoc_loaded?(@changeset.data.artists) -> Enum.map(@changeset.data.artists, & &1.id)
+        true -> []
+      end
     }
-    label="Artists"
   />
 
-  <.input
-    field={f[:album_ids]}
-    type="select"
-    multiple
-    options={Tabby.Albums.Album.album_list()}
+  <.dropdown_multiselect
+    name="piece[album_ids]"
     label="Album"
+    options={Tabby.Albums.Album.album_list()}
+    value={
+      cond do
+        val = Phoenix.HTML.Form.input_value(f, :artist_ids) -> val
+        Ecto.assoc_loaded?(@changeset.data.albums) -> Enum.map(@changeset.data.albums, & &1.id)
+        true -> []
+      end
+    }
   />
 
   <.input field={f[:name]} type="text" label="Name" />
