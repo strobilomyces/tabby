@@ -513,8 +513,6 @@ defmodule TabbyWeb.CoreComponents do
 
   def dropdown_multiselect(assigns) do
     str_values = Enum.map(assigns.value, &to_string/1)
-
-    # Initial load from database/changeset (for page loads or form validation errors)
     selected_labels = for {label, val} <- assigns.options, to_string(val) in str_values, do: label
 
     assigns =
@@ -532,14 +530,12 @@ defmodule TabbyWeb.CoreComponents do
       <input type="hidden" name={@name} value="" />
 
       <div class="relative" id={"dropdown-container-#{@clean_id}"}>
-        <%!-- Trigger Button --%>
         <button
           type="button"
           phx-click={JS.toggle(to: "#menu-#{@clean_id}")}
           phx-click-away={JS.hide(to: "#menu-#{@clean_id}")}
           class="mb-4 w-full flex items-center justify-between rounded-lg border border-zinc-300 bg-white px-3 py-2 text-left text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 min-h-[42px]"
         >
-          <%!-- Class 'selected-display-text' added for JavaScript to target --%>
           <span class="selected-display-text truncate text-zinc-600">
             <%= if Enum.empty?(@selected_labels) do %>
               Select options...
@@ -557,7 +553,6 @@ defmodule TabbyWeb.CoreComponents do
           </svg>
         </button>
 
-        <%!-- Dropdown Menu List (Order remains locked) --%>
         <div
           id={"menu-#{@clean_id}"}
           class="hidden absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
@@ -572,7 +567,6 @@ defmodule TabbyWeb.CoreComponents do
                 checked={str_val in @str_values}
                 class="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900"
               />
-              <%!-- Class 'item-label-text' added for JavaScript to target --%>
               <span class="item-label-text truncate">{label}</span>
             </label>
           <% end %>
