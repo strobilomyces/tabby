@@ -12,21 +12,20 @@ defmodule Tabby.PiecesTest do
 
     test "list_pieces/0 returns all pieces" do
       piece = piece_fixture()
-      expected_piece = %{piece | artist_ids: nil, album_ids: nil}
+      expected_piece = %{piece | artist_ids: nil}
 
       assert Pieces.list_pieces() == [expected_piece]
     end
 
     test "get_piece!/1 returns the piece with given id" do
       piece = piece_fixture()
-      expected_piece = %{piece | artist_ids: nil, album_ids: nil}
+      expected_piece = %{piece | artist_ids: nil}
 
       assert Pieces.get_piece!(piece.id) == expected_piece
     end
 
     test "create_piece/1 with valid data creates a piece" do
       artist = Tabby.ArtistsFixtures.artist_fixture()
-      album = Tabby.AlbumsFixtures.album_fixture()
 
       valid_attrs = %{
         name: "some name",
@@ -34,8 +33,7 @@ defmodule Tabby.PiecesTest do
         instrument: "some instrument",
         tuning: "some tuning",
         contents: "some contents",
-        artist_ids: [artist.id],
-        album_ids: [album.id]
+        artist_ids: [artist.id]
       }
 
       assert {:ok, %Piece{} = piece} = Pieces.create_piece(valid_attrs)
@@ -73,7 +71,7 @@ defmodule Tabby.PiecesTest do
 
     test "update_piece/2 with invalid data returns error changeset" do
       piece = piece_fixture()
-      expected_piece = %{piece | artist_ids: nil, album_ids: nil}
+      expected_piece = %{piece | artist_ids: nil}
 
       assert {:error, %Ecto.Changeset{}} = Pieces.update_piece(expected_piece, @invalid_attrs)
       assert expected_piece == Pieces.get_piece!(expected_piece.id)

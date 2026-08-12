@@ -26,31 +26,104 @@ import {hooks as colocatedHooks} from "phoenix-colocated/tabby"
 import topbar from "../vendor/topbar"
 
 const DropdownDisplay = {
-  mounted() {
-    this.buttonText = this.el.querySelector('.selected-display-text')
+  mounted: function() {
+    var self = this;
+    this.buttonText = this.el.querySelector('.selected-display-text');
+    this.searchInput = this.el.querySelector('.dropdown-search-input');
+    this.items = Array.from(this.el.querySelectorAll('.dropdown-item-row'));
+    this.searchTimeout = null;
     
-    this.el.addEventListener('change', (e) => {
+    var cleanId = this.el.id.replace('dropdown-wrapper-', '');
+    this.menuElement = document.getElementById('menu-' + cleanId);
+    
+    this.el.addEventListener('change', function(e) {
       if (e.target.type === 'checkbox') {
-        this.updateButtonText()
+        self.updateButtonText();
+        self.resetSearchField();
       }
-    })
+    });
+
+    if (this.searchInput) {
+      this.searchInput.addEventListener('input', function(e) {
+        var value = e.target.value.trim();
+
+        if (value.length === 0) {
+          clearTimeout(self.searchTimeout);
+          if (self.menuElement) self.menuElement.classList.add('hidden');
+          self.resetAllRows();
+          return;
+        }
+
+        if (self.menuElement && self.menuElement.classList.contains('hidden')) {
+          self.menuElement.classList.remove('hidden');
+        }
+
+        clearTimeout(self.searchTimeout);
+        self.searchTimeout = setTimeout(function() {
+          self.filterOptions(value);
+        }, 250);
+      });
+    }
   },
 
-  updateButtonText() {
-    let checkedBoxes = Array.from(this.el.querySelectorAll('input[type="checkbox"]:checked'))
+  updateButtonText: function() {
+    if (!this.buttonText || !this.searchInput) return;
+
+    var checkedBoxes = Array.from(this.el.querySelectorAll('input[type="checkbox"]:checked'));
     
     if (checkedBoxes.length === 0) {
-      this.buttonText.textContent = "Select options..."
-      return
+      this.buttonText.textContent = "";
+      this.searchInput.placeholder = "Search artists...";
+      return;
     }
 
-    let selectedNames = checkedBoxes.map(checkbox => {
-      return checkbox.closest('label').querySelector('.item-label-text').textContent.trim()
-    })
+    var selectedNames = checkedBoxes.map(function(checkbox) {
+      return checkbox.closest('label').querySelector('.item-label-text').textContent.trim();
+    });
 
-    this.buttonText.textContent = selectedNames.join(", ")
+    this.buttonText.textContent = selectedNames.join(", ");
+    this.searchInput.placeholder = "";
+  },
+
+  filterOptions: function(searchTerm) {
+    if (!this.menuElement) return;
+
+    var cleanTerm = searchTerm.toLowerCase().trim();
+    var visibleCount = 0;
+
+    this.items.forEach(function(item) {
+      var labelText = item.querySelector('.item-label-text').textContent.toLowerCase().trim();
+      
+      if (labelText.indexOf(cleanTerm) === 0) { // Equivalent to startsWith
+        item.style.display = 'flex';
+        visibleCount++;
+      } else {
+        item.style.display = 'none';
+      }
+    });
+
+    if (visibleCount === 0 && this.menuElement) {
+      this.menuElement.classList.add('hidden');
+    }
+  },
+
+  resetSearchField: function() {
+    if (this.searchInput) {
+      this.searchInput.value = "";
+    }
+    clearTimeout(this.searchTimeout);
+    this.resetAllRows();
+  },
+
+  resetAllRows: function() {
+    this.items.forEach(function(item) {
+      item.style.display = 'flex';
+    });
   }
-}
+};
+
+
+
 
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {

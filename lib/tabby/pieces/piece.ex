@@ -75,12 +75,11 @@ defmodule Tabby.Pieces.Piece do
   @doc false
   def changeset(piece, attrs) do
     piece
-    |> cast(attrs, [:name, :type, :instrument, :tuning, :contents, :capo, :artist_ids, :album_ids])
-    |> validate_required([:name, :type, :instrument, :tuning, :contents, :artist_ids, :album_ids])
+    |> cast(attrs, [:name, :type, :instrument, :tuning, :contents, :capo, :artist_ids])
+    |> validate_required([:name, :type, :instrument, :tuning, :contents, :artist_ids])
     |> generate_slug()
     |> unique_constraint(:slug)
     |> update_artists()
-    |> update_albums()
   end
 
   def update_artists(changeset) do

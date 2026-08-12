@@ -1,28 +1,12 @@
 <Layouts.app flash={@flash} current_scope={@current_scope}>
-  <.header>
-    {@piece.name}
-    <:subtitle>{@piece.slug}</:subtitle>
-    <:actions>
-      <.button navigate={~p"/pieces"}>
-        <.icon name="hero-arrow-left" />
-      </.button>
-      <.button variant="primary" navigate={~p"/pieces/#{@piece}/edit?return_to=show"}>
-        <.icon name="hero-pencil-square" /> Edit piece
-      </.button>
-    </:actions>
-  </.header>
+  <h1 class="text-lg font-semibold">
+    <span :for={artist <- @piece.artists} class="not-last:after:content-['+']">
+      <.link href={~p"/artist/#{artist.slug}"}>{artist.name}</.link>
+    </span>
+    - {@piece.name}
+  </h1>
 
   <.list>
-    <:item title="Artist(s)">
-      <span :for={artist <- @piece.artists} class="not-last:after:content-['+']">
-        <.link href={~p"/artist/#{artist.slug}"}>{artist.name}</.link>
-      </span>
-    </:item>
-    <:item title="Album">
-      <span :for={album <- @piece.albums} class="not-last:after:content-['+']">
-        <.link href={~p"/album/#{album.slug}"}>{album.name}</.link>
-      </span>
-    </:item>
     <:item title="Type">{@piece.type}</:item>
     <:item title="Instrument">{@piece.instrument}</:item>
     <:item title="Tuning">{@piece.tuning}</:item>

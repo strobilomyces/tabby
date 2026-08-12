@@ -12,19 +12,6 @@
     }
   />
 
-  <.dropdown_multiselect
-    name="piece[album_ids]"
-    label="Album"
-    options={Tabby.Albums.Album.album_list()}
-    value={
-      cond do
-        val = Phoenix.HTML.Form.input_value(f, :artist_ids) -> val
-        Ecto.assoc_loaded?(@changeset.data.albums) -> Enum.map(@changeset.data.albums, & &1.id)
-        true -> []
-      end
-    }
-  />
-
   <.input field={f[:name]} type="text" label="Name" />
 
   <.input

@@ -526,40 +526,48 @@ defmodule TabbyWeb.CoreComponents do
 
     ~H"""
     <div class="space-y-1" id={"dropdown-wrapper-#{@clean_id}"} phx-hook="DropdownDisplay">
-      <label class="block text-sm font-semibold text-zinc-800">{@label}</label>
+      <label class="block text-sm text-zinc-800">{@label}</label>
       <input type="hidden" name={@name} value="" />
 
       <div class="relative" id={"dropdown-container-#{@clean_id}"}>
-        <button
-          type="button"
+        <div
           phx-click={JS.toggle(to: "#menu-#{@clean_id}")}
           phx-click-away={JS.hide(to: "#menu-#{@clean_id}")}
-          class="mb-4 w-full flex items-center justify-between rounded-lg border border-zinc-300 bg-white px-3 py-2 text-left text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 min-h-[42px]"
+          class="mb-4 w-full flex items-center justify-between rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-left text-sm shadow-sm focus-within:border-zinc-500 focus-within:ring-1 focus-within:ring-zinc-500 min-h-[42px] cursor-pointer"
         >
-          <span class="selected-display-text truncate text-zinc-600">
-            <%= if Enum.empty?(@selected_labels) do %>
-              Select options...
-            <% else %>
-              {Enum.join(@selected_labels, ", ")}
-            <% end %>
-          </span>
+          <%!-- Combined Layout: Selected labels and Search input sit side-by-side --%>
+          <div
+            class="flex flex-wrap items-center gap-2 flex-1 min-w-0"
+            onclick="arguments[0].stopPropagation();"
+          >
+            <span class="selected-display-text text-zinc-800 font-medium empty:hidden">
+              {if !Enum.empty?(@selected_labels), do: Enum.join(@selected_labels, ", ")}
+            </span>
 
-          <svg class="h-5 w-5 text-zinc-400 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+            <input
+              type="text"
+              placeholder={"Search #{@label}"}
+              class="dropdown-search-input flex-1 min-w-[120px] bg-transparent border-0 p-0 text-sm text-zinc-900 focus:ring-0 focus:outline-none"
+              onkeydown="arguments[0].stopPropagation();"
+            />
+          </div>
+
+          <svg class="h-5 w-5 text-zinc-400 shrink-0 ml-2" viewBox="0 0 20 20" fill="currentColor">
             <path
               fill-rule="evenodd"
               d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
               clip-rule="evenodd"
             />
           </svg>
-        </button>
+        </div>
 
         <div
           id={"menu-#{@clean_id}"}
-          class="hidden absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          class="hidden absolute Regal z-50 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
         >
           <%= for {label, val} <- @options do %>
             <% str_val = to_string(val) %>
-            <label class="flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 cursor-pointer select-none">
+            <label class="dropdown-item-row flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 cursor-pointer select-none">
               <input
                 type="checkbox"
                 name={@name <> "[]"}

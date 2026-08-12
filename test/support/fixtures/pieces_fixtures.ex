@@ -20,8 +20,7 @@ defmodule Tabby.PiecesFixtures do
         name: unique_name(),
         tuning: "some tuning",
         type: "some type",
-        artist_ids: [artist_id()],
-        album_ids: [album_id()]
+        artist_ids: [artist_id()]
       })
       |> Tabby.Pieces.create_piece()
 
